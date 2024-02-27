@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model User {
+//   id               Int            @id @default(autoincrement())
+//   username         String
+//   email            String         @unique
+//   password         String
+//   gender           Gender
+//   profilePicture   String
+//   sentMessages     Message[]      @relation("SentMessages")
+//   receivedMessages Message[]      @relation("ReceivedMessages")
+//   conversations    Conversations[]
+// }
+
+// enum Gender {
+//   MALE
+//   FEMALE
+// }
+
+// model Message {
+//   id            String         @id @default(uuid())
+//   message       String
+//   // one to many relation
+//   // A foreign key column in the Message table named senderId of type Int  which references id column(primary key) of User table
+//   sender        User           @relation("SentMessages", fields: [senderId], references: [id]) // ye message ka sender hai of type User
+//   senderId      Int
+//   receiver      User           @relation("ReceivedMessages", fields: [receiverId], references: [id])
+//   receiverId    Int
+//   conversations Conversations[]
+//   createdAt     DateTime       @default(now())
+//   updatedAt     DateTime       @updatedAt
+// }
+
+// model Conversations {
+//   id Int @id @default(autoincrement())
+//   // implicit many to many relation
+//   participantsId User[]
+//   messages Message[]
+
+// }
+
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+model User {
+  id            Int            @id @default(autoincrement())
+  username      String         @unique
+  email         String         @unique
+  password      String
+  gender        Gender
+  profilePicture   String
+  sentMessages  Message[]      @relation("MessageToUser")
+  receivedMessages Message[]   @relation("MessageToReceiver")
+  conversations Conversation[]
+}
+
+model Message {
+  id           String          @id @default(uuid())
+  message      String
+  senderId     Int
+  receiverId   Int
+  sender       User         @relation("MessageToUser", fields: [senderId], references: [id])
+  receiver     User         @relation("MessageToReceiver", fields: [receiverId], references: [id])
+  conversation Conversation @relation(fields: [conversationId], references: [id])
+  conversationId Int
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Conversation {
+  id           Int        @id @default(autoincrement())
+  participants User[]     @relation
+  messages     Message[] 
+}

@@ -4,8 +4,8 @@ import prisma from "../DB/db.config.js";
 export const protectRoute = async (req, res, next) => {
     try {
         // const token = req.cookies.jwt;
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsImlhdCI6MTcwODk3MTE4MSwiZXhwIjoxNzA5MDU3NTgxfQ.I31aLgk3X93j0C1nhpHtPZeFNaLDrPJJuc7HRBtkFJs"
-        
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsImlhdCI6MTcwOTA2ODM4MSwiZXhwIjoxNzA5MTU0NzgxfQ.n5pP1xgU7PnfPmEx7QDrZZrX4_rETtjm0hSqc5cQ5d0"
+
         console.log(token);
         if (!token) {
             return res

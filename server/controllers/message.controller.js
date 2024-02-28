@@ -79,7 +79,7 @@ export const sendMessage = async (req, res) => {
 
 export const getMessage = async(req, res) => {
     try {
-        const userToChatID = req.params.id;
+        const userToChatID = parseInt(req.params.id);
         const senderId = req.user.id;
 
         const conversation = await prisma.conversation.findFirst({
@@ -88,8 +88,16 @@ export const getMessage = async(req, res) => {
                     { participants: { some: { id: senderId } } },
                     { participants: { some: { id: userToChatID } } },
                 ]
+            },
+            include: {
+                messages: true,
             }
         })
+
+        const messageIds = conversation.messages.map(message => message.id);
+
+        console.log(`Messages Id: ${messageIds}`);
+        res.status(200).json(conversation.messages);
 
     } catch (error) {
         console.log(error);

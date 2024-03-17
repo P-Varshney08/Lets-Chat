@@ -3,10 +3,10 @@ import prisma from "../DB/db.config.js";
 
 export const protectRoute = async (req, res, next) => {
     try {
-        // const token = req.cookies.jwt;
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEsImlhdCI6MTcwOTA2ODM4MSwiZXhwIjoxNzA5MTU0NzgxfQ.n5pP1xgU7PnfPmEx7QDrZZrX4_rETtjm0hSqc5cQ5d0"
+        const token = req.cookies.token;
+        // console.log(`req.cookies ye h - ${req.cookies.token}`)
 
-        console.log(token);
+        console.log("token is: ",token);
         if (!token) {
             return res
                 .status(401)
@@ -16,7 +16,6 @@ export const protectRoute = async (req, res, next) => {
         if (!decoded) {
             return res.status(401).json({ msg: "Invalid Token" });
         }
-        // console.log(`decoded token is: ${decoded}`)
         console.log(`decoded tokenID is: ${decoded._id}`);
         const user = await prisma.user.findFirst({
             where: {
@@ -25,8 +24,9 @@ export const protectRoute = async (req, res, next) => {
         });
         // const passwordExcludedUser = exclude(user, ['password']);
         const { password, ...userWithoutPassword } = user;
-        console.log(`userWithoutPassword is: ${userWithoutPassword}`);
+        // console.log(`userWithoutPassword is: ${JSON.stringify(userWithoutPassword)}`);
         req.user = userWithoutPassword;
+        // console.log(`req.user m kya save hua h dekhte h - ${req.user.email}`)
         next();
     } catch (error) {
         console.log(error);

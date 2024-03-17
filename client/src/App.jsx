@@ -1,25 +1,25 @@
 // import './App.css'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/home/Home'
 import Login from './pages/login/Login'
 import Signup from './pages/signup/Signup'
+import { Toaster } from 'react-hot-toast'
+import { useAuthContext } from './context/AuthContext'
 
 function App() {
+  const {authUser} = useAuthContext();
 
   return (
-    <>
-      {/* <div>
-        <button className="btn">Button</button>
-        <button className="btn btn-neutral">Neutral</button>
-        <button className="btn btn-primary">Primary</button>
-        <button className="btn btn-secondary">Secondary</button>
-        <button className="btn btn-accent">Accent</button>
-        <button className="btn btn-ghost">Ghost</button>
-        <button className="btn btn-link">Link</button>
-      </div> */}
-      <div className='p-4 h-screen flex items-center justify-center'>
-        <Home />
-      </div>
-    </>
+    <div className='p-4 h-screen flex items-center justify-center'>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={authUser ?  <Home /> : <Navigate to='/signup' />} />
+          <Route path='/login' element={authUser ? <Navigate to='/' /> : <Login />} />
+          <Route path='/signup' element={authUser ? <Navigate to='/' /> : <Signup />} />
+        </Routes>
+        <Toaster />
+      </BrowserRouter>
+    </div>
   )
 }
 

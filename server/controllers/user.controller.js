@@ -3,6 +3,7 @@ import prisma from "../DB/db.config.js";
 export const getUsersForSidebar = async(req, res) =>{
     try {
         const loggedUserId = req.user.id;
+        console.log(loggedUserId);
         const allUsers = await prisma.user.findMany({
             where: {
                 NOT: {

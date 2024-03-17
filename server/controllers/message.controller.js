@@ -94,9 +94,16 @@ export const getMessage = async(req, res) => {
             }
         })
 
-        const messageIds = conversation.messages.map(message => message.id);
+        if(!conversation) {
+            console.log("No conversation found");
+            return res.status(200).json([]);
+        }
 
-        console.log(`Messages Id: ${messageIds}`);
+        // const messageIds = conversation.messages.map(message => message.id);
+        const messageIds = conversation.messages;
+        // const real_message=JSON.stringify(messageIds);
+        // console.log(`Messages Id: ${real_message}`);
+        console.log(`Messages Id: ${JSON.stringify(messageIds)}`);
         res.status(200).json(conversation.messages);
 
     } catch (error) {

@@ -15,6 +15,7 @@ app.get('/', (req, res) => {
 })
 
 app.use(express.json()); // Middleware for parsing JSON bodies
+app.use(cors());
 app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
